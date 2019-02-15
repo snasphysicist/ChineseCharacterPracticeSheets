@@ -1,0 +1,150 @@
+
+
+body {
+  text-align: center;
+  font-family: Lato, sans-serif;
+}
+
+fieldset {
+  margin: 15px 0 ;
+}
+
+.form0 {
+  display: flex;
+  flex-direction: column;
+}
+
+.form1 {
+  display: grid;
+  grid-template-columns: auto auto auto;
+}
+
+.form1-option {
+  margin: 2.5px;
+}
+
+.form1-option label {
+  display: block;
+  padding: 20px;
+  border-color: #EEEEEE;
+  border-style: solid;
+  border-width: 4px;
+}
+
+input {
+  width: 100%;
+}
+
+/* Hide native radio button */
+input[type=radio] {
+display: none;
+}
+
+/* Style label when radio button selected */
+input[type=radio]:checked + label {
+  color: white;
+  background-color: #C01D1D;
+  border-color: black;
+  border-style: solid;
+  border-width: 4px;
+  font-weight: bold;
+}
+
+.form3 {
+ display: grid;
+ grid-template-columns: auto auto auto;
+}
+
+div.form3 label {
+  line-height: 0px;
+  padding: 15px;
+  margin: 2.5px;
+  border-color: #EEEEEE;
+  border-style: solid;
+  border-width: 4px;
+  display: grid;
+  grid-template-columns: auto;
+}
+
+div.form3 label img {
+  width: 100%;
+  min-width: 200px;
+  max-width: 300px;
+  height: auto;
+  display: block;
+  margin: 0px auto;
+}
+
+div.form3 label p {
+  margin: 0px auto ;
+}
+
+p {
+  line-height: normal;
+}
+
+.form2 {
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+}
+
+.form2-option {
+  display: grid;
+  grid-template-columns: auto;
+  margin: 2.5px;
+}
+
+div.form2-option label img {
+  width: 80px;
+  margin: 20px;
+}
+
+.form2-option label {
+  line-height: 0px;
+  border-color: #EEEEEE;
+  border-style: solid;
+  border-width: 4px;
+}
+
+button {
+  color: white;
+  background-color: #C01D1D;
+  padding: 10px;
+  border-style: solid;
+  border-radius: 10px;
+  border-color: black;
+  border-width: 4px;
+  font-weight: bold;
+}
+
+@media ( max-width: 800px ) {
+
+  .form3 {
+    grid-template-columns: auto auto;
+  }
+
+}
+
+@media ( max-width: 600px ) {
+
+  .form2 {
+    grid-template-columns: auto auto;
+  }
+
+  .form3 {
+    grid-template-columns: auto;
+  }
+
+}
+
+@media ( max-width: 355px ) {
+
+  .form1 {
+    grid-template-columns: auto;
+  }
+
+  .form2 {
+    grid-template-columns: auto;
+  }
+
+}

@@ -1,0 +1,122 @@
+
+<!DOCTYPE HTML>
+
+<html lang="en">
+
+  <head>
+
+    <title>Chinese Character Practice Sheets</title>
+
+    <meta charset="utf-8">
+    <meta name="description" content="Free chinese character writing practice sheets">
+    <meta name="keywords" content="chinese,character,writing,practice,mandarin,hanyu,zhongwen">
+
+    <link rel="stylesheet" type="text/css" href="../css/ccps.css">
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet">
+
+  </head>
+
+  <body>
+
+    <header>
+      <h1>Chinese Character Writing Practice Sheet Generator</h1>
+    </header>
+
+    <form action="http://127.0.0.1:4001/api/ccps/generate" method="post">
+
+      <div class="form0">
+        <label for="characters">Characters</label>
+        <textarea id="characters" name="characters" rows=4></textarea>
+      </div>
+
+      <fieldset>
+        <legend>Character Size</legend>
+        <div class="form1">
+          <div class="form1-option">
+            <input class="radio" type="radio" name="size" value="small" id="small" checked>
+            <label for="small">Small</label>
+          </div>
+          <div class="form1-option">
+            <input class="radio" type="radio" name="size" value="medium" id="medium">
+            <label for="medium">Medium</label>
+          </div>
+          <div class="form1-option">
+            <input class="radio" type="radio" name="size" value="large" id="large">
+            <label for="large">Large</label>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+
+        <legend>Guide Line Style</legend>
+
+        <div class="form2">
+
+          <div class="form2-option">
+            <input type="radio" name="targetStyle" value="both" id="both" checked>
+            <label for="both">
+              <img src="../img/both.png" alt="Vertical, horizontal and diagonal style guide lines"></img>
+            </label>
+          </div>
+
+          <div class="form2-option">
+            <input type="radio" name="targetStyle" value="plus" id="plus">
+            <label for="plus">
+                <img src="../img/plus.png" alt="Vertical and horizontal style guide lines"></img>
+            </label>
+          </div>
+
+          <div class="form2-option">
+            <input type="radio" name="targetStyle" value="cross" id="cross">
+            <label for="cross">
+              <img src="../img/cross.png" alt="Diagonal style guide lines"></img>
+            </label>
+          </div>
+
+          <div class="form2-option">
+            <input type="radio" name="targetStyle" value="none" id="none">
+            <label for="none">
+              <img src="../img/none.png" alt="No guide lines"></img>
+            </label>
+          </div>
+
+        </div>
+
+      </fieldset>
+
+      <fieldset>
+
+        <legend>Page Style</legend>
+
+        <div class="form3">
+
+          <input type="radio" name="sheetStyle" value="single" id="single" checked>
+          <label for="single">
+            <img src="../img/single.png" alt="One printed character per line"></img>
+            <p>A single printed character at the start of each line</p>
+          </label>
+
+          <input type="radio" name="sheetStyle" value="fade" id="fade">
+          <label for="fade">
+            <img src="../img/fade.png" alt="Characters fade from left"></img>
+            <p>From left printed characters fade halfway through the line</p>
+          </label>
+
+          <input type="radio" name="sheetStyle" value="over" id="over">
+          <label for="over">
+            <img src="../img/over.png" alt="Printed characters above"></img>
+            <p>Printed characters above with empty boxes below</p>
+          </label>
+
+        </div>
+
+      </fieldset>
+
+      <button type="submit" value="submit">Create Sheets</button>
+
+    </form>
+
+  </body>
+
+</html>

@@ -13,9 +13,7 @@ import java.awt.GraphicsEnvironment ;
 import java.awt.RenderingHints ;
 import java.util.LinkedList ;
 import java.util.ArrayList ;
-import java.io.BufferedOutputStream ;
 import java.io.OutputStream ;
-import java.io.FileOutputStream ;
 import java.util.zip.ZipOutputStream ;
 import java.util.zip.ZipEntry ;
 import java.util.logging.Logger ;
@@ -219,8 +217,6 @@ public class ChineseCharacterPracticeSheets {
 		
 		try {
 			
-			
-			
 			String whereami = ChineseCharacterPracticeSheets.class
 					.getProtectionDomain().getCodeSource().getLocation().getPath() ;
 			
@@ -230,9 +226,10 @@ public class ChineseCharacterPracticeSheets {
 			File[] propertiesFileCandidates = searchFilesRecursive( whereami , "logging.properties" ) ;
 			
 			if( propertiesFileCandidates.length == 0 ) {
-				URL url = ChineseCharacterPracticeSheets.class.getResource( FONT_FILE ) ;
-				InputStream in = url.openStream() ; 
-				LogManager.getLogManager().readConfiguration( in ) ;
+				//URL url = ChineseCharacterPracticeSheets.class.getResource( FONT_FILE ) ;
+				//InputStream in = url.openStream() ; 
+				URL url = ChineseCharacterPracticeSheets.class.getResource( LOG_FILE ) ;
+				LogManager.getLogManager().readConfiguration( url.openStream() ) ;
 				System.out.println( "Loaded " + url.toString() + " from JAR" ) ;
 			} else {
 				System.out.println( "Found " + new Integer( propertiesFileCandidates.length ).toString() + " potential logging properties file(s)" ) ;

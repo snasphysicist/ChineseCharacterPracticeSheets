@@ -130,11 +130,10 @@ public class ChineseCharacterPracticeSheets {
 			File[] fontFileCandidates = searchFilesRecursive( whereami , "font" ) ;
 			
 			if( fontFileCandidates.length == 0 ) {
-				URL url = ChineseCharacterPracticeSheets.class.getClass().getResource( "/resources/font.otf" ) ;
+				URL url = ChineseCharacterPracticeSheets.class.getResource( FONT_FILE ) ;
 				InputStream in = url.openStream() ; 
 				font = Font.createFont( Font.TRUETYPE_FONT , in ) ;
-				System.out.println( "Loaded " + url.toString() + " in JAR" ) ;
-				System.out.println( "Attempting to load " + fontFileCandidates[0].getPath() ) ;
+				System.out.println( "Loaded " + url.toString() + " from JAR" ) ;
 			} else {
 				System.out.println( "Found " + new Integer( fontFileCandidates.length ).toString() + " potential font file(s)" ) ;
 				System.out.println( "Attempting to load " + fontFileCandidates[0].getPath() ) ;
@@ -220,18 +219,26 @@ public class ChineseCharacterPracticeSheets {
 		
 		try {
 			
+			
+			
 			String whereami = ChineseCharacterPracticeSheets.class
 					.getProtectionDomain().getCodeSource().getLocation().getPath() ;
 			
 			System.out.println( "I am in " + whereami ) ;
-			
+
 			//Search class directory recursively for logging properties files
 			File[] propertiesFileCandidates = searchFilesRecursive( whereami , "logging.properties" ) ;
 			
-			System.out.println( "Found " + new Integer( propertiesFileCandidates.length ).toString() + " potential properties file(s)" ) ;
-			System.out.println( "Attempting to load " + propertiesFileCandidates[0].getPath() ) ;
-			
-			LogManager.getLogManager().readConfiguration( new FileInputStream( propertiesFileCandidates[0] ) ) ;
+			if( propertiesFileCandidates.length == 0 ) {
+				URL url = ChineseCharacterPracticeSheets.class.getResource( FONT_FILE ) ;
+				InputStream in = url.openStream() ; 
+				LogManager.getLogManager().readConfiguration( in ) ;
+				System.out.println( "Loaded " + url.toString() + " from JAR" ) ;
+			} else {
+				System.out.println( "Found " + new Integer( propertiesFileCandidates.length ).toString() + " potential logging properties file(s)" ) ;
+				System.out.println( "Attempting to load " + propertiesFileCandidates[0].getPath() ) ;
+				LogManager.getLogManager().readConfiguration( new FileInputStream( propertiesFileCandidates[0] ) ) ;
+			}
 			
 			System.out.println( "Success!" ) ;
 			

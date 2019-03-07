@@ -36,6 +36,9 @@
 		<copy todir="${build}">
 			<fileset dir="${src}" includes="**/resources/**"/>
 		</copy>
+<!--		<copy todir="${dist}">
+			<fileset dir="${src}" includes="**/resources/**"/>
+		</copy> -->
 	</target>
 
 	<!-- Compile and copy required libs -->
@@ -54,7 +57,6 @@
 	<!-- Build the jar -->
 	<target name="jar" depends="class">
 		<jar jarfile="${dist}/${jarName}.jar" basedir="${build}" manifest="manifest.mf">
-			<fileset dir="${src}" includes="**/resources/**"/>
 		</jar>
 	</target>
 

@@ -3,6 +3,8 @@ package com.snasphysicist.chinesecharacterpracticesheets ;
 
 import java.awt.image.BufferedImage ;
 import java.io.File;
+import java.io.InputStream ;
+import java.io.FileInputStream ;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D ;
@@ -114,10 +116,34 @@ public class ChineseCharacterPracticeSheets {
 	 * we know includes the required Chinese characters
 	 */
 	private static void setupFont() {
+		
 		try {
-			URL url = ChineseCharacterPracticeSheets.class.getResource( FONT_FILE ) ;
-			Font font = Font.createFont( Font.TRUETYPE_FONT , url.openStream() ) ;
+
+			Font font ;
+			//Path to current class
+			String whereami = ChineseCharacterPracticeSheets.class
+					.getProtectionDomain().getCodeSource().getLocation().getPath() ;
+			
+			System.out.println( "I am in " + whereami ) ;
+			
+			//Look for font in this directory (recursively)
+			File[] fontFileCandidates = searchFilesRecursive( whereami , "font" ) ;
+			
+			if( fontFileCandidates.length == 0 ) {
+				URL url = ChineseCharacterPracticeSheets.class.getClass().getResource( "/resources/font.otf" ) ;
+				InputStream in = url.openStream() ; 
+				font = Font.createFont( Font.TRUETYPE_FONT , in ) ;
+				System.out.println( "Loaded " + url.toString() + " in JAR" ) ;
+				System.out.println( "Attempting to load " + fontFileCandidates[0].getPath() ) ;
+			} else {
+				System.out.println( "Found " + new Integer( fontFileCandidates.length ).toString() + " potential font file(s)" ) ;
+				System.out.println( "Attempting to load " + fontFileCandidates[0].getPath() ) ;
+				font = Font.createFont( Font.TRUETYPE_FONT , fontFileCandidates[0] ) ;
+			}
+			
 			GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont( font ) ;
+			
+			System.out.println( "Success!" ) ;
 		}
 		catch( Exception e ) {
 			e.printStackTrace() ;
@@ -125,16 +151,95 @@ public class ChineseCharacterPracticeSheets {
 	}
 	
 	/*
+	 * Gets (recursively) all files in the current directory and subdirectories
+	 * Filters them by a search string, and returns the filtered array
+	 */
+	private static File[] searchFilesRecursive( String directory , String searchText ) {
+		
+		int i = 0 ;
+		
+		LinkedList<File> files = listFilesRecursive( directory ) ;
+		
+		while( i < files.size() ) {
+			if( !files.get(i).getName().contains( searchText ) ) {
+				files.remove(i) ;
+			} else {
+				i++ ;
+			}
+		}
+		
+		return files.toArray( new File[ files.size() ] ) ;
+		
+	}
+	
+	/*
+	 * Lists the contents of a directory, recursively searching subdirectories
+	 */
+	private static LinkedList<File> listFilesRecursive( String path ) {
+		
+		// List of directories to be searched
+		LinkedList<File> directories = new LinkedList<File>() ;
+		
+		//List of files found
+		LinkedList<File> files = new LinkedList<File>() ;
+		
+		//If the path is a directory, add it in
+		if( new File( path ).isDirectory() ) {
+			directories.add( new File( path ) ) ;
+		} else if ( new File( path ).isFile() ) {
+			directories.add( new File( path ).getParentFile() ) ;
+		}
+
+		//Until all directories have been searched
+		while( directories.size() > 0) {
+			
+			//Contents of current directory
+			File[] currentDirectory = directories.peekFirst().listFiles() ;
+	
+			for ( int i = 0 ; i < currentDirectory.length ; i++ ) {
+			  if ( currentDirectory[i].isFile() ) {
+			    files.add( currentDirectory[i] ) ;
+			  } else if ( currentDirectory[i].isDirectory() ) {
+				  directories.add( currentDirectory[i] ) ;
+			  }
+			}
+			
+			//Throw away the directory that has been checked
+			directories.pop() ;
+			
+		}
+		
+		return files ;
+		
+	}
+	
+	/*
 	 * Sets the logging configuration from included file
 	 */
 	private static void setupLogging() {
+		
 		try {
-			URL url = ChineseCharacterPracticeSheets.class.getResource( LOG_FILE ) ;
-			LogManager.getLogManager().readConfiguration( url.openStream() ) ;
+			
+			String whereami = ChineseCharacterPracticeSheets.class
+					.getProtectionDomain().getCodeSource().getLocation().getPath() ;
+			
+			System.out.println( "I am in " + whereami ) ;
+			
+			//Search class directory recursively for logging properties files
+			File[] propertiesFileCandidates = searchFilesRecursive( whereami , "logging.properties" ) ;
+			
+			System.out.println( "Found " + new Integer( propertiesFileCandidates.length ).toString() + " potential properties file(s)" ) ;
+			System.out.println( "Attempting to load " + propertiesFileCandidates[0].getPath() ) ;
+			
+			LogManager.getLogManager().readConfiguration( new FileInputStream( propertiesFileCandidates[0] ) ) ;
+			
+			System.out.println( "Success!" ) ;
+			
 		}
 		catch( Exception e ) {
 			e.printStackTrace() ;
 		}
+		
 	}
 	
 	/*

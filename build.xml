@@ -61,4 +61,9 @@
 		</jar>
 	</target>
 
+	<!-- Run the jar -->
+  <target name="run" depends="jar">
+  	<java jar="${dist}/${jarName}.jar" fork="true"/>
+  </target>
+
 </project>

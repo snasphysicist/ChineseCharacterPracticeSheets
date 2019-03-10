@@ -391,7 +391,7 @@ public class ChineseCharacterPracticeSheets {
 		Logger.getLogger( "com.snasphysicist.WebServer" ).setLevel( Level.FINE ) ;
 		
 		//Set up the Chinese language font
-		setupFont() ;
+		//setupFont() ;
 		
 		//Setup logging configuration
 		setupLogging() ;

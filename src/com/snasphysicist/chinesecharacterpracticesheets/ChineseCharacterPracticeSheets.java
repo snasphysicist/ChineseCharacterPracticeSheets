@@ -38,7 +38,6 @@ public class ChineseCharacterPracticeSheets {
 	/*
 	 * Resource locations
 	 */
-	private static final String FONT_FILE = "resources/font.otf" ;
 	private static final String LOG_FILE = "resources/logging.properties" ;
 	
 	/*
@@ -107,44 +106,6 @@ public class ChineseCharacterPracticeSheets {
 		
 		return image ;
 		
-	}
-	
-	/*
-	 * Sets up the graphics environment to use the included font that
-	 * we know includes the required Chinese characters
-	 */
-	private static void setupFont() {
-		
-		try {
-
-			Font font ;
-			//Path to current class
-			String whereami = ChineseCharacterPracticeSheets.class
-					.getProtectionDomain().getCodeSource().getLocation().getPath() ;
-			
-			System.out.println( "I am in " + whereami ) ;
-			
-			//Look for font in this directory (recursively)
-			File[] fontFileCandidates = searchFilesRecursive( whereami , "font" ) ;
-			
-			if( fontFileCandidates.length == 0 ) {
-				URL url = ChineseCharacterPracticeSheets.class.getResource( FONT_FILE ) ;
-				InputStream in = url.openStream() ; 
-				font = Font.createFont( Font.TRUETYPE_FONT , in ) ;
-				System.out.println( "Loaded " + url.toString() + " from JAR" ) ;
-			} else {
-				System.out.println( "Found " + new Integer( fontFileCandidates.length ).toString() + " potential font file(s)" ) ;
-				System.out.println( "Attempting to load " + fontFileCandidates[0].getPath() ) ;
-				font = Font.createFont( Font.TRUETYPE_FONT , fontFileCandidates[0] ) ;
-			}
-			
-			GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont( font ) ;
-			
-			System.out.println( "Success!" ) ;
-		}
-		catch( Exception e ) {
-			e.printStackTrace() ;
-		}
 	}
 	
 	/*
@@ -389,10 +350,7 @@ public class ChineseCharacterPracticeSheets {
 		
 		//Set fine logging level
 		Logger.getLogger( "com.snasphysicist.WebServer" ).setLevel( Level.FINE ) ;
-		
-		//Set up the Chinese language font
-		setupFont() ;
-		
+
 		//Setup logging configuration
 		setupLogging() ;
 		

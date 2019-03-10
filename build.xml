@@ -57,7 +57,7 @@
 	<!-- Build the jar -->
 	<target name="jar" depends="class">
 		<jar jarfile="${dist}/${jarName}.jar" basedir="${build}" manifest="manifest.mf">
-			<fileset dir="${src}" includes="**/resources/**"/>
+			<!-- <fileset dir="${src}" includes="**/resources/**"/> -->
 		</jar>
 	</target>
 

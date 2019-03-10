@@ -8,18 +8,66 @@ import java.awt.BasicStroke;
 import java.awt.Color ;
 import java.awt.Font;
 import java.awt.FontMetrics ;
+import java.awt.GraphicsEnvironment ;
 import java.util.ArrayList ;
+import java.util.logging.Logger;
+import java.util.logging.Level ;
 
 public class Cell {
 
-	private final String FONT_NAME = "Noto Sans CJK SC Regular" ;
+	private final static Logger LOG = Logger.getLogger( Logger.class.getName() ) ;
+	
+	private final String PREFERRED_FONT_NAME = "Noto Sans CJK SC Regular" ;
+	private final String FALLBACK_FONT_NAME = "SansSerif.plain" ;
 	
 	private CellSpecification specification ;
 	private Character character ;
 	
+	private static Font currentFont = null ;
+	
 	public Cell( CellSpecification specification , Character character ) {
 		this.specification = specification ;
 		this.character = character ;
+		if( currentFont == null ){
+			setupFont() ;
+		}
+	}
+	
+	/*
+	 * Attempt to set the current font
+	 * to either the preferred font, or
+	 * the backup font if not possible
+	 */
+	private void setupFont() {
+		
+		// Get a complete list of fonts
+		Font[] systemFonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAllFonts() ;
+		
+		// Check all font names to see if they match the preferred name
+		for( Font font : systemFonts ) {
+			if( PREFERRED_FONT_NAME.equals( font.getFontName() ) ) {
+				currentFont = font ;
+				LOG.log( Level.INFO , "Set font to " + font.getFontName() ) ;
+				break ;
+			}
+		}
+		
+		// If the preferred name could not be found
+		if( currentFont == null ) {
+			for( Font font : systemFonts ) {
+				if( FALLBACK_FONT_NAME.equals( font.getFontName() ) ) {
+					currentFont = font ;
+					LOG.log( Level.INFO , "Set font to " + font.getFontName() ) ;
+					break ;
+				}
+			}
+		}
+		
+		// Log if no font could be set
+		if( currentFont == null ) {
+			LOG.log( Level.SEVERE ,  "Could not find preferred or fallback font" ) ;
+		}
+		
 	}
 	
 	private int characterxSize( Graphics2D graphics ) {
@@ -176,7 +224,7 @@ public class Cell {
 	 */
 	private void drawCharacter( Graphics2D graphics, double xPosition, double yPosition ) {
 		//Set font size before calculating character size
-		graphics.setFont( new Font( FONT_NAME , Font.PLAIN , specification.getFontSize() ) ) ;
+		graphics.setFont( new Font( currentFont.getName() , Font.PLAIN , specification.getFontSize() ) ) ;
 		//Calculate character size
 		double characterx = xPosition + getCharacterxPositionRelative( graphics ) ;
 		double charactery = yPosition + getCharacteryPositionRelative( graphics ) ;

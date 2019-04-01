@@ -3,13 +3,10 @@ package com.snasphysicist.chinesecharacterpracticesheets ;
 
 import java.awt.image.BufferedImage ;
 import java.io.File;
-import java.io.InputStream ;
 import java.io.FileInputStream ;
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics2D ;
 import javax.imageio.ImageIO ;
-import java.awt.GraphicsEnvironment ;
 import java.awt.RenderingHints ;
 import java.util.LinkedList ;
 import java.util.ArrayList ;
@@ -285,7 +282,9 @@ public class ChineseCharacterPracticeSheets {
 	/*
 	 * Set up request handlers
 	 */
-	public static void addHandlers( WebServer server ) {
+	public static Router setupHandlers() {
+		
+		Router router = new Router() ;
 		
 		//Page not found handler
 		Function<Request,Response> pageNotFound =
@@ -297,8 +296,6 @@ public class ChineseCharacterPracticeSheets {
 												 "Error 404: Page Not Found" ) ;	
 					}
 		} ;
-		
-		server.addRoute( "/404.html", pageNotFound ) ;
 		
 		// /api/ccps/generate handler
 		
@@ -332,14 +329,89 @@ public class ChineseCharacterPracticeSheets {
 							response = new TextResponse(
 									Protocol.HTTP10, 400,
 									"Invalid Request", 
-									"Error 400: The Request Submitted Contained" 
-									+ " Invalid or Malformatted Information" ) ;
+									"<!doctype html><html><head>" 
+									+ "<script type=\"text/javascript\">"
+									+ "setTimeout(function(){window.location.replace(\"/ccps.html\");}"
+									+ ",3000)</script></head><body>"
+									+ "<p>Error 400: The submitted request contained" 
+									+ " invalid or malformatted information</p>"
+									+ "<p>You will be redirected to the previous page shortly</p>"
+									+ "</body></html>" ) ;
 						}
 						return response ;
 					}
 		} ;
 		
-		server.addRoute( "/api/ccps/generate", generateSheet ) ;
+		router.addRoute( "/404.html", pageNotFound ) ;
+		router.addRoute( "/api/ccps/generate", generateSheet ) ;
+		
+		// Static html 
+		router.addStaticAsset( 
+				"/ccps.html" , 
+				"Chinese Character Practice Sheet Generator" ,
+				ChineseCharacterPracticeSheets.class.getResource( "resources/webpage/html/ccps.html" ) 
+				) ;
+		
+		// Static css
+		router.addStaticAsset( 
+				"/css/ccps.css" , 
+				"Stylesheet", 
+				ChineseCharacterPracticeSheets.class.getResource( "resources/webpage/css/ccps.css" ) 
+				);
+		
+		
+		// Static images
+		router.addStaticAsset( 
+				"/img/both.png" , 
+				"Image", 
+				ChineseCharacterPracticeSheets.class.getResource( "resources/webpage/img/both.png" ) 
+				);
+		
+		router.addStaticAsset( 
+				"/img/plus.png" , 
+				"Image", 
+				ChineseCharacterPracticeSheets.class.getResource( "resources/webpage/img/plus.png" ) 
+				);
+		
+		router.addStaticAsset( 
+				"/img/cross.png" , 
+				"Image", 
+				ChineseCharacterPracticeSheets.class.getResource( "resources/webpage/img/cross.png" ) 
+				);
+		
+		router.addStaticAsset( 
+				"/img/none.png" , 
+				"Image", 
+				ChineseCharacterPracticeSheets.class.getResource( "resources/webpage/img/none.png" ) 
+				);
+		
+		router.addStaticAsset( 
+				"/img/single.png" , 
+				"Image", 
+				ChineseCharacterPracticeSheets.class.getResource( "resources/webpage/img/single.png" ) 
+				);
+		
+		router.addStaticAsset( 
+				"/img/fade.png" , 
+				"Image", 
+				ChineseCharacterPracticeSheets.class.getResource( "resources/webpage/img/fade.png" ) 
+				);
+		
+		router.addStaticAsset( 
+				"/img/over.png" , 
+				"Image", 
+				ChineseCharacterPracticeSheets.class.getResource( "resources/webpage/img/over.png" ) 
+				);
+		
+		/* TEMPLATE
+		router.addStaticAsset( 
+				"" , 
+				"", 
+				ChineseCharacterPracticeSheets.class.getResource( "resources/webpage/" ) 
+				);
+		*/
+		
+		return router ;
 		
 	}
 	
@@ -369,15 +441,12 @@ public class ChineseCharacterPracticeSheets {
 				}
 				
 				//(Re)Initialise server
-				server = new WebServer( SERVER_PORT ) ;
+				server = new WebServer( SERVER_PORT , setupHandlers() ) ;
 				
 				//Open the socket
 				if( !server.openSocket() ) {
 					System.exit( 1 ) ;
 				}
-				
-				//Set up the routes for the server
-				addHandlers( server ) ;
 				
 				//(Re)Start server running
 				serverThread = new Thread( server ) ;

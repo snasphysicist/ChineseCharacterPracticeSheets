@@ -342,8 +342,21 @@ public class ChineseCharacterPracticeSheets {
 					}
 		} ;
 		
+		// /api/heartbeat handler
+		
+		Function<Request,Response> heartbeat =
+			new Function<Request,Response>() {
+				@Override
+				public Response apply( Request rawRequest ) {
+						return new TextResponse(
+								Protocol.HTTP10, 200,
+								"", "beep" ) ;
+					}
+			} ;
+		
 		router.addRoute( "/404.html", pageNotFound ) ;
 		router.addRoute( "/api/ccps/generate", generateSheet ) ;
+		router.addRoute( "/api/heartbeat" , heartbeat ) ;
 		
 		// Static html 
 		router.addStaticAsset( 

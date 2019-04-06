@@ -26,7 +26,7 @@
 
       <div class="form0">
         <label for="characters">Characters</label>
-        <textarea id="characters" name="characters" rows=4></textarea>
+        <textarea id="characters" name="characters" rows=4 required></textarea>
       </div>
 
       <fieldset>
@@ -113,9 +113,33 @@
 
       </fieldset>
 
-      <button type="submit" value="submit">Create Sheets</button>
+      <button type="submit" value="submit" id="submit">Create Sheets</button>
 
     </form>
+
+    <script type="text/javascript">
+      let CJK_MIN = 0x4E00 ;
+      let CJK_MAX = 0x9FFF ;
+      let CHARACTER_INPUT = document.getElementById( "characters" ) ;
+      let SUBMIT_BUTTON = document.getElementById( "submit" ) ;
+      SUBMIT_BUTTON.addEventListener( "click" , function(e){
+          console.log( 'RAN' ) ;
+          hasOneChineseCharacter = false ;
+          let characters = CHARACTER_INPUT.value ;
+          for( let i=0 ; i<characters.length ; i++ ) {
+            if( characters.charCodeAt(i) >= CJK_MIN
+                && characters.charCodeAt(i) <= CJK_MAX ) {
+              hasOneChineseCharacter = true ;
+              break ;
+            }
+          }
+          if( !hasOneChineseCharacter ) {
+            e.preventDefault() ;
+            CHARACTER_INPUT.focus() ;
+          }
+        }
+        , false ) ;
+    </script>
 
   </body>
 

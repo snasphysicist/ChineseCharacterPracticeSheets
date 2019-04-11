@@ -1,4 +1,4 @@
-FROM openjdk:8-jre-alpine
+FROM openjdk:13-alpine
 WORKDIR /usr/local/bin/
 ADD ./dist/ChineseCharacterPracticeSheets.jar ChineseCharacterPracticeSheets.jar
 ADD ./dist/SimpleWebServer.jar SimpleWebServer.jar

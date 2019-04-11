@@ -65,7 +65,7 @@ public class Cell {
 		
 		// Log if no font could be set
 		if( currentFont == null ) {
-			LOG.log( Level.SEVERE ,  "Could not find preferred or fallback font" ) ;
+			LOG.log( Level.SEVERE , "Could not find preferred or fallback font" ) ;
 		}
 		
 	}
@@ -234,7 +234,8 @@ public class Cell {
 		graphics.setColor( new Color( 0 , 0 , 0 , specification.getOpacity() ) ) ;
 		graphics.drawString( character.toString() , 
 							 (int) Math.round( characterx ) , 
-							 (int) Math.round( charactery ) ) ;
+							 ( (int) Math.round( charactery ) ) + specification.getStringPlacementFudge()
+							 ) ;
 	}
 	
 	/*
@@ -247,12 +248,11 @@ public class Cell {
 		drawBox( graphics, xPosition, yPosition ) ;
 		
 		//Draw 'target lines'
-
 		drawTarget( graphics, xPosition, yPosition ) ;
 		
 		//Draw character in box
 		drawCharacter( graphics, xPosition, yPosition ) ;
-		
+
 	}
 
 }

@@ -25,6 +25,9 @@ public class ChineseCharacterPracticeSheets {
 	//Server port
 	private static final int SERVER_PORT = 4001 ;
 	
+	//Maximum number of threads the server will work on
+	private static final int MAXIMUM_THREADS = 1024 ;
+	
 	/*
 	 * Minimum and maximum integer values for 
 	 * CJK characters in unicode
@@ -454,7 +457,7 @@ public class ChineseCharacterPracticeSheets {
 				}
 				
 				//(Re)Initialise server
-				server = new WebServer( SERVER_PORT , setupHandlers() ) ;
+				server = new WebServer( SERVER_PORT , MAXIMUM_THREADS , setupHandlers() ) ;
 				
 				//Open the socket
 				if( !server.openSocket() ) {
